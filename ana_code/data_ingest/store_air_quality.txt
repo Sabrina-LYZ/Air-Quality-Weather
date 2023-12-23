@@ -1,0 +1,37 @@
+-- connect to Hive
+beeline -u jdbc:hive2://localhost:10000
+
+-- use database
+use zs2134_nyu_edu;
+
+ 
+CREATE EXTERNAL TABLE air_quality (
+  MEASURE_DATE STRING, 
+  SOURCE STRING, 
+  SITE_ID INT, 
+  POC INT,
+  DAILY_MEAN_CONCENTRATION DOUBLE, 
+  UNITS STRING, 
+  DAILY_AQI_VALUE INT,
+  SITE_NAME STRING, 
+  DAILY_OBS_COUNT INT, 
+  PERCENT_COMPLETE DOUBLE,
+  AQS_PARAMETER_CODE INT, 
+  AQS_PARAMETER_DESC STRING, 
+  CBSA_CODE INT, 
+  CBSA_NAME STRING, 
+  STATE_CODE INT, 
+  STATE STRING,
+  COUNTY_CODE INT, 
+  COUNTY STRING, 
+  SITE_LATITUDE DOUBLE, 
+  SITE_LONGITUDE DOUBLE
+)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+   "separatorChar" = ",",
+   "quoteChar"     = "\""
+)
+STORED AS textfile 
+LOCATION 'hdfs://nyu-dataproc-m/user/zs2134_nyu_edu/project/air_quality'
+TBLPROPERTIES ("skip.header.line.count"="1");
